@@ -1,6 +1,6 @@
-# my_flutter_app
+# crypto_currency_app
 
-A new Flutter project.
+A sample for trading
 
 ## Getting Started
 
