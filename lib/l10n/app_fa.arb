@@ -1,0 +1,6 @@
+{
+    "helloWorld": "سلام جهان!",
+    "@helloWorld": {
+      "description": "تولد جدید"
+    }
+}
