@@ -11,6 +11,7 @@ class LatestNews extends StatelessWidget {
       height: 30,
       child: Marquee(
         text: 'This is a sample test',
+        scrollAxis: Axis.horizontal,
       ),
     );
   }

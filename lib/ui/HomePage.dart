@@ -3,12 +3,25 @@ import 'package:my_flutter_app/ui/helper/HomePageView.dart';
 import 'package:my_flutter_app/ui/helper/ThemeSwitcher.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final PageController _pageViewController = PageController(
     initialPage: 0,
   );
+
+  var defaultChoiceIndex = 0;
+
+  final List<String> _choicesList = [
+    'Top MarketCaps',
+    'Top Gainers',
+    'Top Losers'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +80,83 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => {},
+                          style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(15),
+                            backgroundColor: Colors.green[700],
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Buy'),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(15),
+                            backgroundColor: Colors.red[700],
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Sell'),
+                          onPressed: () => {},
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5, right: 5),
+                  child: Row(
+                    children: [
+                      Wrap(
+                        spacing: 8,
+                        children: List.generate(
+                          _choicesList.length,
+                          (index) {
+                            return ChoiceChip(
+                              label: Text(
+                                _choicesList[index],
+                                style: textTheme.titleSmall,
+                              ),
+                              selected: defaultChoiceIndex == index,
+                              selectedColor: Colors.blue,
+                              onSelected: (value) => {
+                                setState(() {
+                                  defaultChoiceIndex =
+                                      value ? index : defaultChoiceIndex;
+                                })
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
