@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_flutter_app/providers/ThemeProvider.dart';
+import 'package:my_flutter_app/providers/cryptoDataProvider.dart';
 import 'package:my_flutter_app/ui/layout/MainWraper.dart';
 
 import 'package:provider/provider.dart';
@@ -13,7 +14,10 @@ void main() {
     DeviceOrientation.portraitUp,
   ]);
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => Themeprovider())],
+    providers: [
+      ChangeNotifierProvider(create: (context) => Themeprovider()),
+      ChangeNotifierProvider(create: (context) => CryptoDataProvider()),
+    ],
     child: const MyMaterialApp(),
   ));
 }
