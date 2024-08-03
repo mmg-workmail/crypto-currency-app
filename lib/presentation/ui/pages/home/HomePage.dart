@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/network/ResponseModel.dart';
-import 'package:my_flutter_app/providers/cryptoDataProvider.dart';
-import 'package:my_flutter_app/ui/helper/HomePageView.dart';
-import 'package:my_flutter_app/ui/helper/ThemeSwitcher.dart';
+import 'package:my_flutter_app/logic/providers/cryptoDataProvider.dart';
+import 'package:my_flutter_app/presentation/ui/helper/HomePageView.dart';
+import 'package:my_flutter_app/presentation/ui/helper/ThemeSwitcher.dart';
+import 'package:my_flutter_app/presentation/ui/pages/home/CryptoCurrencyItems.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -17,24 +17,6 @@ class _HomePageState extends State<HomePage> {
   final PageController _pageViewController = PageController(
     initialPage: 0,
   );
-
-  var defaultChoiceIndex = 0;
-
-  final List<String> _choicesList = [
-    'Top MarketCaps',
-    'Top Gainers',
-    'Top Losers'
-  ];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    final cryptoProvider =
-        Provider.of<CryptoDataProvider>(context, listen: false);
-    cryptoProvider.getTopMarketCapData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,48 +123,9 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Row(
-                    children: [
-                      Wrap(
-                        spacing: 8,
-                        children: List.generate(
-                          _choicesList.length,
-                          (index) {
-                            return ChoiceChip(
-                              label: Text(
-                                _choicesList[index],
-                                style: textTheme.titleSmall,
-                              ),
-                              selected: defaultChoiceIndex == index,
-                              selectedColor: Colors.blue,
-                              onSelected: (value) => {
-                                setState(() {
-                                  defaultChoiceIndex =
-                                      value ? index : defaultChoiceIndex;
-                                })
-                              },
-                            );
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Consumer<CryptoDataProvider>(
-                  builder: (context, cryptoDataProvider, child) {
-                    switch (cryptoDataProvider.state.status) {
-                      case Status.LOADING:
-                        return Text(cryptoDataProvider.state.message);
-                      case Status.COMPLETED:
-                        return Text('Done');
-                      case Status.ERROR:
-                        return Text(cryptoDataProvider.state.message);
-                      default:
-                        return Container();
-                    }
-                  },
+                ChangeNotifierProvider<CryptoDataProvider>(
+                  create: (context) => CryptoDataProvider(),
+                  child: Cryptocurrencyitems(),
                 )
               ],
             ),

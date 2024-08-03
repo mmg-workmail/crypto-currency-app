@@ -6,9 +6,11 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var primaryColor = Theme.of(context).primaryColor;
+
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
-      color: Colors.amber,
+      color: primaryColor,
       notchMargin: 10,
       child: SizedBox(
         height: 63,

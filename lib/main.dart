@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_flutter_app/providers/ThemeProvider.dart';
-import 'package:my_flutter_app/providers/cryptoDataProvider.dart';
-import 'package:my_flutter_app/ui/layout/MainWraper.dart';
+import 'package:my_flutter_app/logic/providers/ThemeProvider.dart';
+import 'package:my_flutter_app/logic/providers/UserViewProvider.dart';
+import 'package:my_flutter_app/logic/providers/cryptoDataProvider.dart';
+import 'package:my_flutter_app/logic/providers/marketViewProvider.dart';
+import 'package:my_flutter_app/presentation/ui/layout/MainWraper.dart';
+import 'package:my_flutter_app/presentation/ui/pages/auth/SignUpScreen.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +20,9 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => Themeprovider()),
-      ChangeNotifierProvider(create: (context) => CryptoDataProvider()),
+      // ChangeNotifierProvider(create: (context) => CryptoDataProvider()),
+      ChangeNotifierProvider(create: (context) => MarketViewprovider()),
+      ChangeNotifierProvider(create: (context) => UserViewProvider()),
     ],
     child: const MyMaterialApp(),
   ));
@@ -49,10 +55,34 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
           Locale('en'), // English
           Locale('fa'), // Persian
         ],
-        home: const Directionality(
+        home: Directionality(
           textDirection: TextDirection.ltr,
-          child: MainWraper(),
+          child: FutureBuilder<SharedPreferences>(
+            future: SharedPreferences.getInstance(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                SharedPreferences sharedPreferences = snapshot.data!;
+                var loggedInState =
+                    sharedPreferences.getBool('loggedIn') ?? false;
+
+                if (loggedInState) {
+                  return const MainWraper();
+                } else {
+                  return const SignUpScreen();
+                }
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
+        // home: const Directionality(
+        //   textDirection: TextDirection.ltr,
+        //   // child: MainWraper(),
+        //   child: SignUpScreen(),
+        // ),
       );
     });
   }
